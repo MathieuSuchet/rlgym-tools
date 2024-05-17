@@ -22,8 +22,6 @@ class AdvancedStacker(ObsBuilder):
         self.action_stacks = {}
         self.action_size = self.default_action.shape[0]
 
-    def blank_stack(self, car_id: int) -> None:
-
     def add_action_to_stack(self, new_action: np.ndarray, car_id: int):
         stack = self.action_stacks[car_id]
         stack[self.action_size:] = stack[:-self.action_size]
@@ -32,8 +30,7 @@ class AdvancedStacker(ObsBuilder):
     def reset(self, initial_state: GameState):
         self.action_stacks = {}
         for p in initial_state.players:
-            self.action_stacks[p.car_id] = np.concatenate([default_action] * stack_size
-            
+            self.action_stacks[p.car_id] = np.concatenate([self.default_action] * self.stack_size)
 
     def build_obs(self, player: PlayerData, state: GameState, previous_action: np.ndarray) -> Any:
         self.add_action_to_stack(previous_action, player.car_id)
